@@ -106,7 +106,7 @@ export default function Contact() {
                 <div className="w-10 h-10 bg-[#1E3A8A]/10 rounded-lg flex items-center justify-center shrink-0">
                   <Mail size={18} className="text-[#1E3A8A]" />
                 </div>
-                <div className="grid grid-cols-3 items-center w-full">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full gap-2">
                   <div>
                     <p className="font-semibold text-[#1E3A8A] text-sm">Email</p>
                     <a href="mailto:animargueil@gmail.com" className="text-[#4A5580] text-sm hover:text-[#1E3A8A] underline transition-colors">
@@ -117,7 +117,7 @@ export default function Contact() {
                     href="https://www.facebook.com/profile.php?id=61590007125273"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex justify-center cursor-pointer"
+                    className="group flex items-center gap-2 cursor-pointer"
                   >
                     <img
                       src="/facebook-logo.png"
@@ -126,7 +126,6 @@ export default function Contact() {
                       style={{ width: 72, height: 72 }}
                     />
                   </a>
-                  <div />
                 </div>
               </div>
 
