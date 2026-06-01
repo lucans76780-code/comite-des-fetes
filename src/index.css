@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+3:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #1E3A8A;
+  --color-primary-light: #2B52C8;
+  --color-accent: #C9A227;
+  --color-accent-light: #E8C03A;
+  --color-bg: #F8F7F2;
+  --color-bg-dark: #D4DBF0;
+  --color-text: #1A2640;
+  --color-text-muted: #4A5580;
+  --font-heading: 'Bebas Neue', sans-serif;
+  --font-body: 'Source Sans 3', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Source Sans 3', sans-serif;
+  background-color: #F8F7F2;
+  color: #1A2640;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 0.05em;
+}
