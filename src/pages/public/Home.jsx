@@ -56,6 +56,29 @@ export default function Home() {
         </button>
       </div>
 
+      {/* Réseaux sociaux */}
+      <section className="bg-[#F0F4FF] border-b border-[#D4DBF0] py-5 px-4">
+        <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-4">
+          <p className="text-[#1E3A8A] font-semibold tracking-wide text-sm uppercase" style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: '1.1rem', letterSpacing: '0.15em' }}>
+            Rejoignez-nous sur les réseaux
+          </p>
+          <a
+            href="https://www.facebook.com/profile.php?id=61590007125273"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
+          >
+            <img
+              src="/facebook-logo.png"
+              alt="Facebook – Anim Argueil"
+              className="transition-transform duration-200 group-hover:scale-110"
+              style={{ width: 52, height: 52, objectFit: 'contain' }}
+            />
+            <span className="text-[#1E3A8A] text-sm font-semibold">Anim Argueil</span>
+          </a>
+        </div>
+      </section>
+
       {/* Présentation */}
       <section className="max-w-4xl mx-auto px-4 py-12 text-center">
         <h2
