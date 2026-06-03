@@ -1,4 +1,9 @@
 export const SITE_URL = 'https://www.animargueil.fr'
+
+/** Google Search Console — propriété domaine animargueil.fr */
+export const SEARCH_CONSOLE_URL =
+  import.meta.env.VITE_SEARCH_CONSOLE_URL?.trim() ||
+  'https://search.google.com/search-console?resource_id=sc-domain%3Aanimargueil.fr'
 export const SITE_NAME = 'Anim Argueil'
 export const DEFAULT_DESCRIPTION =
   "Anim Argueil – Comité des fêtes d'Argueil. Animations, événements et festivités locales à Argueil, Seine-Maritime (76)."

@@ -5,6 +5,7 @@ import {
   GA_DASHBOARD_URL,
   hasAnalyticsConfigured,
 } from '../../lib/analytics'
+import { SEARCH_CONSOLE_URL } from '../../lib/seo'
 import {
   Users,
   Images,
@@ -13,6 +14,7 @@ import {
   LogOut,
   Handshake,
   BarChart3,
+  Search,
   ExternalLink,
   RefreshCw,
   Mail,
@@ -194,7 +196,7 @@ export default function AdminDashboard() {
 
         {/* Google Analytics */}
         <section className="mb-10">
-          <h3 className="text-[#1A2640] font-bold text-lg mb-4">Fréquentation du site</h3>
+          <h3 className="text-[#1A2640] font-bold text-lg mb-4">Fréquentation & référencement</h3>
           <div className="bg-white rounded-xl border-2 border-[#1E3A8A]/20 p-6 shadow-sm">
             <div className="flex flex-col sm:flex-row sm:items-center gap-5">
               <div className="w-14 h-14 rounded-xl bg-[#EEF2FF] flex items-center justify-center text-[#1E3A8A] shrink-0">
@@ -233,6 +235,36 @@ export default function AdminDashboard() {
                 voir où vont les visiteurs (Accueil, Événements, Contact…).
               </p>
             )}
+          </div>
+
+          <div className="bg-white rounded-xl border-2 border-[#C9A227]/30 p-6 shadow-sm mt-5">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-5">
+              <div className="w-14 h-14 rounded-xl bg-amber-50 flex items-center justify-center text-[#C9A227] shrink-0">
+                <Search size={28} />
+              </div>
+              <div className="flex-1">
+                <h4 className="font-bold text-[#1A2640] text-lg mb-1">Google Search Console</h4>
+                <p className="text-[#4A5580] text-sm leading-relaxed">
+                  Vérifiez si vos pages sont <strong>indexées</strong> par Google, l'état du
+                  sitemap et les éventuels problèmes de référencement pour{' '}
+                  <strong>animargueil.fr</strong>.
+                </p>
+              </div>
+              <a
+                href={SEARCH_CONSOLE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 bg-[#C9A227] text-[#1A2640] px-5 py-3 rounded-lg hover:bg-[#E0B83D] transition-colors text-sm font-semibold shrink-0 cursor-pointer"
+              >
+                Voir l'indexation
+                <ExternalLink size={16} />
+              </a>
+            </div>
+            <p className="mt-4 text-xs text-[#4A5580] border-t border-[#C9A227]/20 pt-4">
+              Astuce : <em>Indexation → Pages</em> pour les URL indexées, <em>Sitemaps</em> pour
+              confirmer que <code className="text-xs bg-[#F8F7F2] px-1 rounded">sitemap.xml</code>{' '}
+              est bien pris en compte.
+            </p>
           </div>
         </section>
 
