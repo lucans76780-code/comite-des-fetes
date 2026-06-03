@@ -1,4 +1,5 @@
-import { Calendar, MapPin } from 'lucide-react'
+import { Calendar, MapPin, ExternalLink } from 'lucide-react'
+import { googleMapsUrl } from '../lib/maps'
 
 export default function EventCard({ event }) {
   const { nom, date, lieu, affiche_url } = event
@@ -12,16 +13,16 @@ export default function EventCard({ event }) {
 
   return (
     <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col border border-[#D4DBF0]">
-      <div className="relative h-48 bg-[#D4DBF0] overflow-hidden">
+      <div className="relative aspect-[3/4] max-h-[22rem] bg-[#F0F4FF] overflow-hidden flex items-center justify-center">
         {affiche_url ? (
           <img
             src={affiche_url}
             alt={`Affiche de ${nom}`}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain"
             loading="lazy"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center">
+          <div className="w-full h-full flex items-center justify-center min-h-48">
             <img src="/blason.png" alt="" className="h-16 opacity-20" />
           </div>
         )}
@@ -40,9 +41,17 @@ export default function EventCard({ event }) {
             <Calendar size={16} className="text-[#C9A227] shrink-0" />
             <span className="capitalize">{formattedDate}</span>
           </div>
-          <div className="flex items-center gap-2">
-            <MapPin size={16} className="text-[#C9A227] shrink-0" />
-            <span>{lieu}</span>
+          <div className="flex items-start gap-2">
+            <MapPin size={16} className="text-[#C9A227] shrink-0 mt-0.5" />
+            <a
+              href={googleMapsUrl(lieu)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 hover:text-[#1E3A8A] underline transition-colors cursor-pointer"
+            >
+              {lieu}
+              <ExternalLink size={12} className="shrink-0 opacity-60" />
+            </a>
           </div>
         </div>
       </div>

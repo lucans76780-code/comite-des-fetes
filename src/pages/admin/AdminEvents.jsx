@@ -1,7 +1,8 @@
 ﻿import { useEffect, useState, useRef, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
-import { ArrowLeft, PlusCircle, Trash2, CalendarDays, MapPin, Upload } from 'lucide-react'
+import { ArrowLeft, PlusCircle, Trash2, CalendarDays, MapPin, Upload, ExternalLink } from 'lucide-react'
+import { googleMapsUrl } from '../../lib/maps'
 
 const emptyForm = { nom: '', date: '', lieu: '', affiche_url: '' }
 
@@ -173,7 +174,7 @@ export default function AdminEvents() {
 
                 {affichePreview && (
                   <div className="relative w-24 h-32">
-                    <img src={affichePreview} alt="Aperçu affiche" className="w-full h-full object-cover rounded-lg shadow" />
+                    <img src={affichePreview} alt="Aperçu affiche" className="w-full h-full object-contain rounded-lg shadow bg-[#F0F4FF]" />
                     <button
                       type="button"
                       onClick={() => { setAfficheFile(null); setAffichePreview('') }}
@@ -214,7 +215,7 @@ export default function AdminEvents() {
                 return (
                   <div key={event.id} className="flex items-center gap-4 py-4">
                     {event.affiche_url ? (
-                      <img src={event.affiche_url} alt="" className="w-12 h-16 object-cover rounded-lg shadow-sm shrink-0" />
+                      <img src={event.affiche_url} alt="" className="w-12 h-16 object-contain rounded-lg shadow-sm shrink-0 bg-[#F0F4FF]" />
                     ) : (
                       <div className="w-12 h-16 bg-[#F8F7F2] rounded-lg flex items-center justify-center shrink-0">
                         <CalendarDays size={20} className="text-[#D4DBF0]" />
@@ -232,10 +233,16 @@ export default function AdminEvents() {
                           <CalendarDays size={11} />
                           {new Date(event.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
                         </span>
-                        <span className="flex items-center gap-1">
+                        <a
+                          href={googleMapsUrl(event.lieu)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-1 hover:text-[#1E3A8A] underline cursor-pointer"
+                        >
                           <MapPin size={11} />
                           {event.lieu}
-                        </span>
+                          <ExternalLink size={10} className="opacity-60" />
+                        </a>
                       </div>
                     </div>
                     <button
