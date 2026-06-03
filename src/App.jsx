@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Footer from './components/Footer'
 import AdminRoute from './components/AdminRoute'
 import ScrollToTop from './components/ScrollToTop'
+import SeoHead from './components/SeoHead'
 
 // Pages publiques
 import Home from './pages/public/Home'
@@ -34,6 +35,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
+      <SeoHead />
       <Routes>
         {/* Pages publiques */}
         <Route path="/" element={<PublicLayout><Home /></PublicLayout>} />

@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import Hero from '../../components/Hero'
+import JsonLd from '../../components/JsonLd'
 import { supabase } from '../../lib/supabase'
 import { Building2 } from 'lucide-react'
 
@@ -43,6 +44,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen">
+      <JsonLd />
       {/* Hero avec bouton admin discret */}
       <div className="relative">
         <Hero title="Anim Argueil" />
