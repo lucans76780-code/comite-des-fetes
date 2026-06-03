@@ -177,7 +177,7 @@ export default function AdminDashboard() {
               value={loading ? '…' : (stats?.upcomingEvents?.length ?? 0)}
               sub={
                 nextEvent
-                  ? `Prochain : ${nextEvent.titre} (${new Date(nextEvent.date).toLocaleDateString('fr-FR')})`
+                  ? `Prochain : ${nextEvent.nom} (${new Date(nextEvent.date).toLocaleDateString('fr-FR')})`
                   : 'Aucun événement planifié'
               }
             />

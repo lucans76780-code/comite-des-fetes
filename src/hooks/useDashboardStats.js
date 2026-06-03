@@ -35,7 +35,7 @@ export function useDashboardStats() {
         supabase.from('event_requests').select('id', { count: 'exact', head: true }),
         supabase
           .from('events')
-          .select('id, titre, date, lieu')
+          .select('id, nom, date, lieu')
           .gte('date', today)
           .order('date', { ascending: true })
           .limit(3),
@@ -59,11 +59,21 @@ export function useDashboardStats() {
           .limit(3),
       ])
 
-      const errs = [
-        unreadContacts.error,
-        unreadSuggestions.error,
-        eventsUpcoming.error,
-      ].filter(Boolean)
+      const allResults = [
+        unreadContacts,
+        unreadSuggestions,
+        contactsTotal,
+        suggestionsTotal,
+        eventRequestsTotal,
+        eventsUpcoming,
+        eventsTotal,
+        galleryTotal,
+        partnersTotal,
+        recentContacts,
+        recentSuggestions,
+        recentRequests,
+      ]
+      const errs = allResults.map((r) => r.error).filter(Boolean)
       if (errs.length) throw errs[0]
 
       const unreadMessages =
