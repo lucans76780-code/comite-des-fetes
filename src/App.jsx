@@ -5,6 +5,8 @@ import Footer from './components/Footer'
 import AdminRoute from './components/AdminRoute'
 import ScrollToTop from './components/ScrollToTop'
 import SeoHead from './components/SeoHead'
+import GoogleAnalytics from './components/GoogleAnalytics'
+import CookieConsent from './components/CookieConsent'
 
 // Pages publiques
 import Home from './pages/public/Home'
@@ -36,6 +38,8 @@ export default function App() {
     <BrowserRouter>
       <ScrollToTop />
       <SeoHead />
+      <GoogleAnalytics />
+      <CookieConsent />
       <Routes>
         {/* Pages publiques */}
         <Route path="/" element={<PublicLayout><Home /></PublicLayout>} />
