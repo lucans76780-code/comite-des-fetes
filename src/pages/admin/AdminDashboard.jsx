@@ -5,7 +5,11 @@ import {
   GA_DASHBOARD_URL,
   hasAnalyticsConfigured,
 } from '../../lib/analytics'
-import { SEARCH_CONSOLE_URL } from '../../lib/seo'
+import {
+  GOOGLE_BUSINESS_MANAGE_URL,
+  GOOGLE_BUSINESS_URL,
+  SEARCH_CONSOLE_URL,
+} from '../../lib/seo'
 import {
   Users,
   Images,
@@ -15,6 +19,7 @@ import {
   Handshake,
   BarChart3,
   Search,
+  Store,
   ExternalLink,
   RefreshCw,
   Mail,
@@ -265,6 +270,41 @@ export default function AdminDashboard() {
               confirmer que <code className="text-xs bg-[#F8F7F2] px-1 rounded">sitemap.xml</code>{' '}
               est bien pris en compte.
             </p>
+          </div>
+
+          <div className="bg-white rounded-xl border-2 border-emerald-200 p-6 shadow-sm mt-5">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-5">
+              <div className="w-14 h-14 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-700 shrink-0">
+                <Store size={28} />
+              </div>
+              <div className="flex-1">
+                <h4 className="font-bold text-[#1A2640] text-lg mb-1">Google Business</h4>
+                <p className="text-[#4A5580] text-sm leading-relaxed">
+                  Consultez la fiche <strong>Anim Argueil</strong> telle qu'elle apparaît sur Google
+                  (avis, horaires, photos) et modifiez-la depuis le tableau de bord Google Business.
+                </p>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-2 shrink-0">
+                <a
+                  href={GOOGLE_BUSINESS_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 bg-emerald-700 text-white px-5 py-3 rounded-lg hover:bg-emerald-800 transition-colors text-sm font-semibold cursor-pointer"
+                >
+                  Voir sur Google
+                  <ExternalLink size={16} />
+                </a>
+                <a
+                  href={GOOGLE_BUSINESS_MANAGE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 border border-emerald-300 text-emerald-800 px-5 py-3 rounded-lg hover:bg-emerald-50 transition-colors text-sm font-semibold cursor-pointer"
+                >
+                  Gérer la fiche
+                  <ExternalLink size={16} />
+                </a>
+              </div>
+            </div>
           </div>
         </section>
 

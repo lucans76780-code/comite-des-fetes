@@ -4,6 +4,14 @@ export const SITE_URL = 'https://www.animargueil.fr'
 export const SEARCH_CONSOLE_URL =
   import.meta.env.VITE_SEARCH_CONSOLE_URL?.trim() ||
   'https://search.google.com/search-console?resource_id=sc-domain%3Aanimargueil.fr'
+
+/** Fiche Google Business / résultat « Anim Argueil » sur Google */
+export const GOOGLE_BUSINESS_URL =
+  import.meta.env.VITE_GOOGLE_BUSINESS_URL?.trim() ||
+  'https://www.google.com/search?q=animargueil&stick=H4sIAAAAAAAA_-NgU1I2qLAwSjQ0NjAxMDQzSzQ1T7EyqDA0MDMyMjYwSjJKTDM0N1zEyp2Yl5mbWJRempqZAwATsT7qNQAAAA&hl=fr&mat=CXU8XTq_H4LQElcBTVDHngfhQqY0cAsAz0_u_NL4PNyrQYQ2uqGwE5gAp-IuBG3BaH24ZowdAeOx9az1vM31vzAubkd0tGyVX_1kRQakviIyHudB74RDIzSDqAPH5KO1p5k'
+
+/** Tableau de bord pour modifier la fiche (horaires, avis, photos) */
+export const GOOGLE_BUSINESS_MANAGE_URL = 'https://business.google.com/'
 export const SITE_NAME = 'Anim Argueil'
 export const DEFAULT_DESCRIPTION =
   "Anim Argueil – Comité des fêtes d'Argueil. Animations, événements et festivités locales à Argueil, Seine-Maritime (76)."
