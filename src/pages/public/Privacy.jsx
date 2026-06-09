@@ -1,7 +1,7 @@
 import Hero from '../../components/Hero'
 import { SITE_URL } from '../../lib/seo'
 
-const LAST_UPDATED = '3 juin 2026'
+const LAST_UPDATED = '5 juin 2026'
 
 function Section({ title, children }) {
   return (
@@ -83,9 +83,15 @@ export default function Privacy() {
         <Section title="4. Combien de temps conservons-nous vos données ?">
           <p>
             <strong>Messages de contact et suggestions</strong> : les données sont conservées le
-            temps nécessaire pour traiter votre demande et vous répondre. Elles sont{' '}
-            <strong>supprimées définitivement</strong> lorsqu&apos;un administrateur du Comité des
-            fêtes d&apos;Argueil les efface depuis l&apos;espace d&apos;administration du site.
+            temps nécessaire pour traiter votre demande et vous répondre, et{' '}
+            <strong>au maximum 12 mois</strong> à compter de leur réception. Elles sont{' '}
+            <strong>supprimées définitivement</strong> lorsqu&apos;un administrateur les efface
+            depuis l&apos;espace d&apos;administration du site.
+          </p>
+          <p>
+            <strong>Photos de la galerie</strong> : contenus publics du comité, conservés tant
+            qu&apos;ils restent utiles pour présenter les événements. Ils sont retirés uniquement
+            sur décision d&apos;un administrateur (pas de suppression automatique à 1 an).
           </p>
           <p>
             <strong>Données d&apos;audience (Google Analytics)</strong> : conservées selon les

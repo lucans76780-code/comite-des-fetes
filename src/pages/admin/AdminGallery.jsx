@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 import { ArrowLeft, Upload, Trash2, ImagePlus, X } from 'lucide-react'
 
+const MAX_FILE_SIZE = 10 * 1024 * 1024
+const MAX_FILES_PER_BATCH = 20
+
 function sanitizePathSegment(value) {
   return value
     .trim()
@@ -45,7 +48,10 @@ export default function AdminGallery() {
 
   const handleFileSelect = (files) => {
     const arr = Array.from(files).filter((f) => f.type.startsWith('image/'))
-    const MAX_FILE_SIZE = 10 * 1024 * 1024
+    if (arr.length > MAX_FILES_PER_BATCH) {
+      setError(`Maximum ${MAX_FILES_PER_BATCH} photos par envoi. Sélectionnez un paquet plus petit.`)
+      return
+    }
     const oversized = arr.filter((f) => f.size > MAX_FILE_SIZE)
     if (oversized.length > 0) {
       setError(`Fichier(s) trop volumineux (max 10 Mo) : ${oversized.map((f) => f.name).join(', ')}`)
@@ -78,15 +84,20 @@ export default function AdminGallery() {
 
     let uploaded = 0
     const insertData = []
+    const total = selectedFiles.length
+    const { compressGalleryImage } = await import('../../lib/imageCompress')
 
     for (const file of selectedFiles) {
-      const ext = file.name.split('.').pop().toLowerCase().replace(/[^a-z0-9]/g, '')
+      const compressed = await compressGalleryImage(file)
+      const isWebp = compressed.type === 'image/webp'
+      const ext = isWebp ? 'webp' : file.name.split('.').pop().toLowerCase().replace(/[^a-z0-9]/g, '') || 'jpg'
       const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
       const path = `${safeEventName}/${fileName}`
 
-      const { error: uploadErr } = await supabase.storage.from('gallery').upload(path, file, {
+      const { error: uploadErr } = await supabase.storage.from('gallery').upload(path, compressed, {
         cacheControl: '3600',
         upsert: false,
+        contentType: compressed.type || 'image/jpeg',
       })
 
       if (uploadErr) {
@@ -99,7 +110,7 @@ export default function AdminGallery() {
       insertData.push({ url: publicUrl, nom_evenement: nomEvenement.trim().slice(0, 120) })
 
       uploaded++
-      setProgress(Math.round((uploaded / selectedFiles.length) * 100))
+      setProgress(Math.round((uploaded / total) * 100))
     }
 
     const { error: dbErr } = await supabase.from('gallery_photos').insert(insertData)
@@ -190,7 +201,12 @@ export default function AdminGallery() {
             >
               <Upload size={32} className="text-[#C9A227] mx-auto mb-3" />
               <p className="text-[#1E3A8A] font-semibold">Cliquez ou glissez vos photos ici</p>
-              <p className="text-[#4A5580] text-sm mt-1">JPG, PNG, WEBP — max 10 Mo par fichier</p>
+              <p className="text-[#4A5580] text-sm mt-1">
+                JPG, PNG, WEBP, GIF — max 10 Mo par fichier, {MAX_FILES_PER_BATCH} photos max par envoi
+              </p>
+              <p className="text-[#4A5580] text-xs mt-2">
+                Les images sont automatiquement optimisées à l&apos;envoi (WebP, max 1920 px, ~1 Mo).
+              </p>
               <input
                 ref={fileInputRef}
                 type="file"
@@ -227,7 +243,7 @@ export default function AdminGallery() {
             {uploading && (
               <div>
                 <div className="flex justify-between text-sm text-[#4A5580] mb-1">
-                  <span>Upload en cours…</span>
+                  <span>Compression et envoi en cours…</span>
                   <span>{progress}%</span>
                 </div>
                 <div className="w-full bg-[#D4DBF0] rounded-full h-2">
