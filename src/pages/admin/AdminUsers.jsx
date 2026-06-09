@@ -1,12 +1,13 @@
 ﻿import { useEffect, useState, useRef, useCallback } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../context/AuthContext'
 import { ArrowLeft, UserPlus, Trash2, Shield, Eye, EyeOff, KeyRound, Pencil } from 'lucide-react'
 import { ADMIN_EMAIL_DOMAIN } from '../../lib/constants'
 
 export default function AdminUsers() {
-  const { admin: currentAdmin } = useAuth()
+  const { admin: currentAdmin, logout } = useAuth()
+  const navigate = useNavigate()
   const [accounts, setAccounts] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -19,7 +20,9 @@ export default function AdminUsers() {
   const [addSuccess, setAddSuccess] = useState('')
 
   // Changement de son propre mot de passe
+  const [currentPassword, setCurrentPassword] = useState('')
   const [ownPassword, setOwnPassword] = useState('')
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false)
   const [showOwnPassword, setShowOwnPassword] = useState(false)
   const [changingPassword, setChangingPassword] = useState(false)
   const [pwSuccess, setPwSuccess] = useState('')
@@ -126,22 +129,49 @@ export default function AdminUsers() {
 
   const handleChangePassword = async (e) => {
     e.preventDefault()
+    if (currentPassword.length < 1) {
+      setPwError('Indiquez votre mot de passe actuel.')
+      return
+    }
     if (ownPassword.length < 6) {
-      setPwError('Le mot de passe doit contenir au moins 6 caractères.')
+      setPwError('Le nouveau mot de passe doit contenir au moins 6 caractères.')
+      return
+    }
+    if (currentPassword === ownPassword) {
+      setPwError('Le nouveau mot de passe doit être différent de l\'actuel.')
       return
     }
     setChangingPassword(true)
     setPwError('')
     setPwSuccess('')
 
+    const loginEmail = currentAdmin?.email
+    if (!loginEmail) {
+      setPwError('Session invalide. Reconnectez-vous.')
+      setChangingPassword(false)
+      return
+    }
+
+    const { error: reauthError } = await supabase.auth.signInWithPassword({
+      email: loginEmail,
+      password: currentPassword,
+    })
+    if (reauthError) {
+      setPwError('Mot de passe actuel incorrect.')
+      setChangingPassword(false)
+      return
+    }
+
     const { error } = await supabase.auth.updateUser({ password: ownPassword })
 
     if (error) {
-      setPwError('Erreur lors du changement de mot de passe.')
+      setPwError(error.message || 'Erreur lors du changement de mot de passe.')
     } else {
-      setPwSuccess('Mot de passe modifié avec succès.')
+      setPwSuccess('Mot de passe modifié. Reconnexion…')
+      setCurrentPassword('')
       setOwnPassword('')
-      pwTimerRef.current = setTimeout(() => setPwSuccess(''), 5000)
+      await logout()
+      navigate('/admin/login', { replace: true, state: { message: 'Mot de passe modifié. Connectez-vous avec votre nouveau mot de passe.' } })
     }
     setChangingPassword(false)
   }
@@ -159,13 +189,22 @@ export default function AdminUsers() {
 
     const newEmail = cleanPseudo + ADMIN_EMAIL_DOMAIN
 
-    const { error: authErr } = await supabase.auth.updateUser({
+    const { data: authData, error: authErr } = await supabase.auth.updateUser({
       email: newEmail,
       data: { pseudo: cleanPseudo },
     })
 
     if (authErr) {
-      setPseudoError('Erreur lors du changement de pseudo.')
+      setPseudoError(authErr.message || 'Erreur lors du changement de pseudo.')
+      setChangingPseudo(false)
+      return
+    }
+
+    const authEmail = authData.user?.email?.toLowerCase()
+    if (authEmail !== newEmail.toLowerCase()) {
+      setPseudoError(
+        'Le pseudo n\'a pas pu être appliqué : la confirmation email est requise côté Supabase. L\'email de connexion reste inchangé — contactez le support technique.'
+      )
       setChangingPseudo(false)
       return
     }
@@ -178,10 +217,11 @@ export default function AdminUsers() {
     if (dbErr) {
       setPseudoError('Pseudo mis à jour dans auth mais erreur en base.')
     } else {
-      setPseudoSuccess(`Pseudo changé en "${cleanPseudo}" avec succès.`)
+      setPseudoSuccess(`Pseudo changé en "${cleanPseudo}". Reconnectez-vous avec ce pseudo.`)
       setNewPseudoSelf('')
       fetchAccounts()
-      pseudoTimerRef.current = setTimeout(() => setPseudoSuccess(''), 5000)
+      await logout()
+      navigate('/admin/login', { replace: true, state: { message: `Pseudo modifié. Connectez-vous avec « ${cleanPseudo} ».` } })
     }
     setChangingPseudo(false)
   }
@@ -218,34 +258,57 @@ export default function AdminUsers() {
           {pwError && <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 mb-4 text-sm" role="alert">{pwError}</div>}
           {pwSuccess && <div className="bg-blue-50 border border-[#1E3A8A]/30 text-[#1E3A8A] rounded-lg px-4 py-3 mb-4 text-sm" role="status">{pwSuccess}</div>}
 
-          <form onSubmit={handleChangePassword} className="flex gap-3">
-            <div className="relative flex-1">
+          <form onSubmit={handleChangePassword} className="space-y-3">
+            <div className="relative">
               <input
-                type={showOwnPassword ? 'text' : 'password'}
+                type={showCurrentPassword ? 'text' : 'password'}
                 required
-                value={ownPassword}
-                onChange={(e) => setOwnPassword(e.target.value)}
-                placeholder="Nouveau mot de passe (6 car. min)"
-                minLength={6}
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                placeholder="Mot de passe actuel"
                 maxLength={128}
                 className="w-full border border-[#D4DBF0] rounded-lg px-4 py-2.5 pr-10 text-[#1A2640] focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] transition text-sm"
+                autoComplete="current-password"
               />
               <button
                 type="button"
-                onClick={() => setShowOwnPassword(!showOwnPassword)}
+                onClick={() => setShowCurrentPassword(!showCurrentPassword)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-[#BCC8E8] hover:text-[#4A5580] cursor-pointer"
-                aria-label={showOwnPassword ? 'Masquer' : 'Afficher'}
+                aria-label={showCurrentPassword ? 'Masquer' : 'Afficher'}
               >
-                {showOwnPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                {showCurrentPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             </div>
-            <button
-              type="submit"
-              disabled={changingPassword}
-              className="flex items-center gap-2 bg-[#1E3A8A] text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-[#2B52C8] transition-colors cursor-pointer disabled:opacity-60 text-sm whitespace-nowrap"
-            >
-              {changingPassword ? 'Modification…' : 'Modifier'}
-            </button>
+            <div className="flex gap-3">
+              <div className="relative flex-1">
+                <input
+                  type={showOwnPassword ? 'text' : 'password'}
+                  required
+                  value={ownPassword}
+                  onChange={(e) => setOwnPassword(e.target.value)}
+                  placeholder="Nouveau mot de passe (6 car. min)"
+                  minLength={6}
+                  maxLength={128}
+                  className="w-full border border-[#D4DBF0] rounded-lg px-4 py-2.5 pr-10 text-[#1A2640] focus:outline-none focus:ring-2 focus:ring-[#1E3A8A] transition text-sm"
+                  autoComplete="new-password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowOwnPassword(!showOwnPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#BCC8E8] hover:text-[#4A5580] cursor-pointer"
+                  aria-label={showOwnPassword ? 'Masquer' : 'Afficher'}
+                >
+                  {showOwnPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+              <button
+                type="submit"
+                disabled={changingPassword}
+                className="flex items-center gap-2 bg-[#1E3A8A] text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-[#2B52C8] transition-colors cursor-pointer disabled:opacity-60 text-sm whitespace-nowrap"
+              >
+                {changingPassword ? 'Modification…' : 'Modifier'}
+              </button>
+            </div>
           </form>
         </div>
 

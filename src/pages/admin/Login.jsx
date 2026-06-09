@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 import { Lock, User, Eye, EyeOff } from 'lucide-react'
 import { ADMIN_EMAIL_DOMAIN } from '../../lib/constants'
@@ -22,6 +22,8 @@ function saveLockoutState(state) {
 
 export default function Login() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const infoMessage = location.state?.message ?? ''
   const [pseudo, setPseudo] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -87,6 +89,11 @@ export default function Login() {
           className="bg-white rounded-2xl shadow-lg p-8 space-y-5 border border-[#D4DBF0]"
           autoComplete="off"
         >
+          {infoMessage && (
+            <div className="bg-blue-50 border border-[#1E3A8A]/30 text-[#1E3A8A] rounded-lg px-4 py-3 text-sm text-center" role="status">
+              {infoMessage}
+            </div>
+          )}
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 text-sm text-center" role="alert">
               {error}
