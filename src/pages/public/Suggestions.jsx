@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../../lib/supabase'
 import Hero from '../../components/Hero'
+import FormPrivacyNotice from '../../components/FormPrivacyNotice'
 import { Send, CheckCircle, Lightbulb } from 'lucide-react'
 
 const LIMITS = { nom: 60, prenom: 60, email: 120, telephone: 20, suggestion: 2000 }
@@ -139,6 +140,7 @@ export default function Suggestions() {
             <Send size={18} />
             {submitting ? 'Envoi en cours…' : 'Envoyer ma suggestion'}
           </button>
+          <FormPrivacyNotice />
         </form>
       </section>
     </div>

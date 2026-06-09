@@ -44,6 +44,11 @@ export const ROUTE_SEO = {
     description:
       "Proposez vos idées d'animations et d'événements pour Argueil. Le comité des fêtes vous écoute.",
   },
+  '/confidentialite': {
+    title: 'Politique de confidentialité – Anim Argueil',
+    description:
+      "Comment le Comité des fêtes d'Argueil collecte, utilise et protège vos données personnelles (RGPD).",
+  },
 }
 
 export const ADMIN_SEO = {

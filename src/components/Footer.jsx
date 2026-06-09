@@ -60,8 +60,16 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-[#2B52C8] pt-4 text-center text-sm">
+        <div className="border-t border-[#2B52C8] pt-4 text-center text-sm space-y-2">
           <p>© {year} Comité des Fêtes d'Argueil. Tous droits réservés.</p>
+          <p>
+            <Link
+              to="/confidentialite"
+              className="underline hover:text-white transition-colors duration-200 cursor-pointer"
+            >
+              Politique de confidentialité
+            </Link>
+          </p>
         </div>
       </div>
     </footer>

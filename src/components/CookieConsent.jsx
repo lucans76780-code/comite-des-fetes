@@ -47,8 +47,8 @@ export default function CookieConsent() {
           Ce site utilise Google Analytics pour mesurer la fréquentation (pages visitées, source
           de trafic). Les données sont traitées par Google. Vous pouvez accepter ou refuser ce
           suivi.{' '}
-          <Link to="/contact" className="text-[#1E3A8A] underline hover:text-[#2B52C8]">
-            En savoir plus
+          <Link to="/confidentialite" className="text-[#1E3A8A] underline hover:text-[#2B52C8]">
+            Politique de confidentialité
           </Link>
         </p>
         <div className="flex flex-wrap gap-2 shrink-0">

@@ -14,6 +14,7 @@ import Events from './pages/public/Events'
 import Suggestions from './pages/public/Suggestions'
 import Gallery from './pages/public/Gallery'
 import Contact from './pages/public/Contact'
+import Privacy from './pages/public/Privacy'
 
 // Pages admin
 import Login from './pages/admin/Login'
@@ -47,6 +48,7 @@ export default function App() {
         <Route path="/suggestions" element={<PublicLayout><Suggestions /></PublicLayout>} />
         <Route path="/galerie" element={<PublicLayout><Gallery /></PublicLayout>} />
         <Route path="/contact" element={<PublicLayout><Contact /></PublicLayout>} />
+        <Route path="/confidentialite" element={<PublicLayout><Privacy /></PublicLayout>} />
 
         {/* Connexion admin */}
         <Route path="/admin/login" element={<Login />} />

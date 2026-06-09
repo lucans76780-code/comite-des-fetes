@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../../lib/supabase'
 import Hero from '../../components/Hero'
+import FormPrivacyNotice from '../../components/FormPrivacyNotice'
 import { Send, CheckCircle, Mail, Phone, MapPin } from 'lucide-react'
 
 
@@ -190,6 +191,7 @@ export default function Contact() {
                 <Send size={18} />
                 {submitting ? 'Envoi en cours…' : 'Envoyer mon message'}
               </button>
+              <FormPrivacyNotice />
             </form>
           </div>
         </div>
