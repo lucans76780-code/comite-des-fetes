@@ -2,7 +2,7 @@ import { Calendar, MapPin, ExternalLink } from 'lucide-react'
 import { googleMapsUrl } from '../lib/maps'
 
 export default function EventCard({ event }) {
-  const { nom, date, lieu, affiche_url } = event
+  const { nom, date, lieu, affiche_url, resume } = event
 
   const formattedDate = new Date(date).toLocaleDateString('fr-FR', {
     weekday: 'long',
@@ -36,7 +36,11 @@ export default function EventCard({ event }) {
           {nom}
         </h3>
 
-        <div className="flex flex-col gap-2 text-sm text-[#4A5580]">
+        {resume?.trim() && (
+          <p className="text-sm text-[#1A2640] leading-relaxed mb-3 flex-1">{resume.trim()}</p>
+        )}
+
+        <div className="flex flex-col gap-2 text-sm text-[#4A5580] mt-auto">
           <div className="flex items-center gap-2">
             <Calendar size={16} className="text-[#C9A227] shrink-0" />
             <span className="capitalize">{formattedDate}</span>

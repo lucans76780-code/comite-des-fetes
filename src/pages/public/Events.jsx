@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabase'
 import Hero from '../../components/Hero'
 import EventCard from '../../components/EventCard'
+import EventsJsonLd from '../../components/EventsJsonLd'
 
 export default function Events() {
   const [events, setEvents] = useState([])
@@ -22,6 +23,7 @@ export default function Events() {
 
   return (
     <div>
+      <EventsJsonLd events={events} />
       <Hero title="Événements" subtitle="Tous nos prochains rendez-vous" />
 
       <section className="max-w-7xl mx-auto px-4 py-12">

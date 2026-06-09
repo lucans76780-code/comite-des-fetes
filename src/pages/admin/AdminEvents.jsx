@@ -4,7 +4,8 @@ import { supabase } from '../../lib/supabase'
 import { ArrowLeft, PlusCircle, Trash2, CalendarDays, MapPin, Upload, ExternalLink } from 'lucide-react'
 import { googleMapsUrl } from '../../lib/maps'
 
-const emptyForm = { nom: '', date: '', lieu: '', affiche_url: '' }
+const RESUME_MAX = 800
+const emptyForm = { nom: '', date: '', lieu: '', resume: '', affiche_url: '' }
 
 export default function AdminEvents() {
   const [events, setEvents] = useState([])
@@ -53,6 +54,10 @@ export default function AdminEvents() {
     if (form.nom.trim().length < 2) { setError("Le nom est trop court."); return }
     if (!form.date) { setError("La date est requise."); return }
     if (!form.lieu.trim()) { setError("Le lieu est requis."); return }
+    if (form.resume.trim() && form.resume.trim().length < 30) {
+      setError('Le résumé doit contenir au moins 30 caractères (ou laissez vide).')
+      return
+    }
     setSubmitting(true)
 
     let affiche_url = ''
@@ -71,7 +76,14 @@ export default function AdminEvents() {
       affiche_url = publicUrl
     }
 
-    const { error: err } = await supabase.from('events').insert([{ ...form, affiche_url }])
+    const payload = {
+      nom: form.nom.trim(),
+      date: form.date,
+      lieu: form.lieu.trim(),
+      resume: form.resume.trim() || null,
+      affiche_url,
+    }
+    const { error: err } = await supabase.from('events').insert([payload])
 
     if (err) {
       setError('Erreur lors de l\'ajout de l\'événement.')
@@ -158,6 +170,27 @@ export default function AdminEvents() {
               </div>
             </div>
 
+            <div>
+              <label htmlFor="resume" className="block text-sm font-semibold text-[#1E3A8A] mb-1">
+                Résumé de l&apos;événement{' '}
+                <span className="text-[#4A5580] font-normal">(recommandé pour le référencement)</span>
+              </label>
+              <textarea
+                id="resume"
+                name="resume"
+                rows={4}
+                value={form.resume}
+                onChange={handleChange}
+                maxLength={RESUME_MAX}
+                className="w-full border border-[#D4DBF0] rounded-lg px-4 py-2.5 text-[#1A2640] focus:outline-none focus:ring-2 focus:ring-[#C9A227] transition text-sm resize-none"
+                placeholder="Décrivez l'événement : type d'animation, public visé, lieu à Argueil… (min. 30 caractères si renseigné)"
+              />
+              <p className="text-xs text-[#4A5580] mt-1">
+                {form.resume.length}/{RESUME_MAX} — Ce texte apparaît sur le site et aide Google à référencer
+                l&apos;événement. Mentionnez « Argueil » et le type de festivité.
+              </p>
+            </div>
+
             {/* Affiche */}
             <div>
               <label className="block text-sm font-semibold text-[#1E3A8A] mb-2">Affiche (optionnel)</label>
@@ -228,6 +261,9 @@ export default function AdminEvents() {
                           <span className="ml-2 text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">Passé</span>
                         )}
                       </p>
+                      {event.resume && (
+                        <p className="text-xs text-[#4A5580] mt-1 line-clamp-2">{event.resume}</p>
+                      )}
                       <div className="flex flex-wrap gap-3 mt-1 text-xs text-[#4A5580]">
                         <span className="flex items-center gap-1">
                           <CalendarDays size={11} />
