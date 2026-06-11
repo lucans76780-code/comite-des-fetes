@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { supabase } from '../../lib/supabase'
+import { supabasePublic } from '../../lib/supabasePublic'
 import Hero from '../../components/Hero'
 import FormPrivacyNotice from '../../components/FormPrivacyNotice'
 import { Send, CheckCircle, Mail, Phone, MapPin } from 'lucide-react'
@@ -55,7 +55,7 @@ export default function Contact() {
       message: form.message.trim(),
     }
 
-    const { error: err } = await supabase.from('contacts').insert([sanitized])
+    const { error: err } = await supabasePublic.from('contacts').insert([sanitized])
 
     if (err) {
       setError('Une erreur est survenue. Veuillez réessayer.')

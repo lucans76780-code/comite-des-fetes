@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { supabase } from '../../lib/supabase'
+import { supabasePublic } from '../../lib/supabasePublic'
 import Hero from '../../components/Hero'
 import FormPrivacyNotice from '../../components/FormPrivacyNotice'
 import { Send, CheckCircle, Lightbulb } from 'lucide-react'
@@ -52,7 +52,7 @@ export default function Suggestions() {
       suggestion: form.suggestion.trim(),
     }
 
-    const { error: err } = await supabase.from('suggestions').insert([sanitized])
+    const { error: err } = await supabasePublic.from('suggestions').insert([sanitized])
 
     if (err) {
       setError('Une erreur est survenue. Veuillez réessayer.')

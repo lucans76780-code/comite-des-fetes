@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import Hero from '../../components/Hero'
 import JsonLd from '../../components/JsonLd'
+import { FACEBOOK_URL } from '../../lib/seo'
 import { supabase } from '../../lib/supabase'
 import { Building2 } from 'lucide-react'
 
@@ -65,7 +66,7 @@ export default function Home() {
             Rejoignez-nous sur les réseaux
           </p>
           <a
-            href="https://www.facebook.com/profile.php?id=61590007125273"
+            href={FACEBOOK_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="group flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
